@@ -655,6 +655,326 @@ print `end-start`
 
 end_total = time.time()
 
+##############
+# problem #17
+##############
+# Number letter counts
+
+def hex_digits_verb ( d ):
+    if d == 0:  temp = ''
+    if d == 1:  temp = 'one'
+    if d == 2:  temp = 'two'
+    if d == 3:  temp = 'three'
+    if d == 4:  temp = 'four'
+    if d == 5:  temp = 'five'
+    if d == 6:  temp = 'six'
+    if d == 7:  temp = 'seven'
+    if d == 8:  temp = 'eight'
+    if d == 9:  temp = 'nine'
+    if d == 10: temp = 'ten'
+    if d == 11: temp = 'eleven'
+    if d == 12: temp = 'twelve'
+    if d == 13: temp = 'thirteen'
+    if d == 14: temp = 'fourteen'
+    if d == 15: temp = 'fifteen'
+    return temp
+
+def tens_verb ( t ):
+    if t == 0: temp = ''
+    if t == 1: temp = 'teen'
+    if t == 2: temp = 'twenty'
+    if t == 3: temp = 'thirty'
+    if t == 4: temp = 'forty'
+    if t == 5: temp = 'fifty'
+    if t == 6: temp = 'sixty'
+    if t == 7: temp = 'seventy'
+    if t == 8: temp = 'eighty'
+    if t == 9: temp = 'ninety'
+    return temp
+
+def powers_ten_verb ( x ):
+    if x == 10: temp = 'ten'
+    if x == 100: temp = 'hundred'
+    if x == 1000: temp = 'thousend'
+    if x == 1000000: temp = 'million'
+    return temp
+
+def numbernames ( n ):
+    num = str(n); temp = ''
+    if n < 16:
+        temp += hex_digits_verb(n)
+    elif n >= 16 and n < 20:
+        if n == 18:
+            temp += 'eighteen'
+        else:
+            temp += hex_digits_verb(int(num[1])) + tens_verb(int(num[0]))
+    elif n < 100:
+        temp += tens_verb(int(num[0]))
+        if int(num[1]) != 0:
+            temp += '-' + hex_digits_verb(int(num[1]))
+    elif n < 1000:
+        temp += hex_digits_verb(int(num[0])) + ' hundred'
+        n = n - int(num[0])*100
+        if n != 0:
+            temp += ' and ' + numbernames(n)
+    else:
+        temp = 'not yet finished'
+    return temp
+
+def number_letter_count( n ):
+    s = numbernames(n)
+    s = s.replace('-','')
+    s = s.replace(' ','')
+    return len(s)
+
+def number_letter_counts( n ):
+    s = 0
+    for m in xrange(n):
+        s += number_letter_count(m)
+    return s
+
+#print number_letter_counts(1000) + len('onethousand')# transform number_letter_counts(100) to basic arithmetic as total count below
+
+start = time.time()
+
+N = 10*number_letter_counts(100)# strings of numbers from 0-99 occur in every segment of the hundreds
+
+units = [3,3,5,4,4,3,5,5,4]
+
+K1 = 7*900# length of string 'hundred' (=7) appears 9*100=900 times in total
+K2 = 3*891# length of string 'and' (=3) appears 9*99=891 times in total
+K3 = len('onethousand')
+
+s = N + K1 + K2 + K3# number of static strings
+
+for i in xrange(9):# adding the number of changing strings
+    s += units[i]*100
+
+end = time.time()
+
+printsolution(17,s)#
+print `end-start`
+
+
+##############
+# problem #18
+##############
+# Maximum path sum I
+
+def max_path_sum( t ):
+    for i,j in [(i,j) for i in range(len(t)-2,-1,-1) for j in range(i+1)]:
+        t[i][j] +=  max([t[i+1][j],t[i+1][j+1]])
+    return t[0][0]
+
+tri = [
+        [75],
+        [95,64],
+        [17,47,82],
+        [18,35,87,10],
+        [20,4,82,47,65],
+        [19,1,23,75,3,34],
+        [88,2,77,73,7,63,67],
+        [99,65,4,28,6,16,70,92],
+        [41,41,26,56,83,40,80,70,33],
+        [41,48,72,33,47,32,37,16,94,29],
+        [53,71,44,65,25,43,91,52,97,51,14],
+        [70,11,33,28,77,73,17,78,39,68,17,57],
+        [91,71,52,38,17,14,91,43,58,50,27,29,48],
+        [63,66,4,68,89,53,67,30,73,16,69,87,40,31],
+        [4,62,98,27,23,9,70,98,73,93,38,53,60,4,23]
+    ]
+
+start = time.time()
+
+printsolution(18,max_path_sum(tri))#
+
+end = time.time()
+
+print `end-start`
+
+
+##############
+# problem #19
+##############
+# Counting Sundays
+
+daycount = [31,28,31,30,31,30,31,31,30,31,30,31]
+firsts = [32]
+
+for x in xrange(11): firsts.append(firsts[x]+daycount[x+1])
+
+firsts_leap = [32] + [i+1 for i in firsts[1:12]]
+
+def sundays_count( limit ):
+    o = 1; s = 0
+    for y in xrange(1901,limit+1):
+        if y%4 == 0 and (y%100 != 0 or y%400 == 0):
+            for f in firsts_leap:
+                a=0
+                for n in xrange(a,54):
+                    if 7*n-o == f: s=s+1
+                    a=a+4
+            o = (o+2)%7
+        else:
+            for f in firsts:
+                a=0
+                for n in xrange(a,54):
+                    if 7*n-o == f: s=s+1
+                    a=a+4
+            o = (o+1)%7
+    return s
+
+start = time.time()
+
+printsolution(19,sundays_count(2000))#
+
+end = time.time()
+
+print `end-start`
+
+
+##############
+# problem #20
+##############
+# Factorial digit sum
+
+start = time.time()
+
+r = '1'
+
+for k in xrange(1,100):
+    r = int(r)*k
+    fac = str(r).strip('0')
+
+s = 0
+
+for d in fac:
+    s += int(d)
+
+printsolution(19,s)#
+
+end = time.time()
+
+print `end-start`
+
+
+##############
+# problem #21
+##############
+# Amicable numbers
+
+start = time.time()
+
+N = range(2,10001)
+s = 0
+
+while N:
+    x = N[0]
+    d_x = 0
+    for j in xrange(1,x/2+1):
+        if x%j == 0:
+            d_x += j
+    d_d_x = 0
+    for k in xrange(1,d_x/2+1):
+        if d_x%k == 0:
+            d_d_x += k
+    if d_d_x == x and (x != d_x):
+        s += x
+    N = N[1:]
+
+printsolution(21,s)#
+
+end = time.time()
+
+print `end-start`
+
+
+##############
+# problem #22
+##############
+# Names scores
+
+end = time.time()
+
+def alph2sum ( uc_str ):
+    return sum([ord(char)-64 for char in uc_str])
+    
+f = open('p022_names.txt', 'r')
+
+for line in f:
+    names = line.split(',')
+names = [n.strip('"') for n in sorted(names)]
+    
+f.close()
+
+s=0
+
+for i in xrange(len(names)): s += (i+1)*alph2sum(names[i])
+
+printsolution(22,s)#
+
+end = time.time()
+
+print `end-start`
+
+
+##############
+# problem #23
+##############
+# Non-abundant sums
+
+
+##############
+# problem #24
+##############
+# Lexicographic permutations
+
+start = time.time()
+
+perm = []; loopcount = 0
+
+A = range(10)
+for a in A:
+    if loopcount == 1000000: break
+    B = copy.copy(A)
+    B.remove(a)
+    for b in B:
+        C = copy.copy(B)
+        C.remove(b)
+        for c in C:
+            D = copy.copy(C)
+            D.remove(c)
+            for d in D:
+                E = copy.copy(D)
+                E.remove(d)
+                for e in E:
+                    F = copy.copy(E)
+                    F.remove(e)
+                    for f in F:
+                        G = copy.copy(F)
+                        G.remove(f)
+                        for g in G:
+                            H = copy.copy(G)
+                            H.remove(g)
+                            for h in H:
+                                I = copy.copy(H)
+                                I.remove(h)
+                                for i in I:
+                                    J = copy.copy(I)
+                                    J.remove(i)
+                                    for j in J:
+                                        perm.append('%s%s%s%s%s%s%s%s%s%s' % (a,b,c,d,e,f,g,h,i,j))
+                                        loopcount += 1
+
+printsolution(24,perm[999999])#
+
+end = time.time()
+
+print `end-start`
+
+
+end_total = time.time()
+
 print 'Total time of computation: ' + `end_total-start_total`
 
 #########################
