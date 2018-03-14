@@ -25,6 +25,9 @@ def isprime(n):
 def iscoprime2(n,m):
   return bltin_gcd(n,m) == 1
 
+
+start_total = time.time()
+
 ##############
 # problem #26
 ##############
@@ -109,11 +112,10 @@ for c in check:
     max_prime_streak = temp_prime_streak
     max_tuple = c
 
-print(max_prime_streak,max_tuple)#71, [-69,971]
-
 end = time.time()
 
 printsolution(27,max_tuple[0]*max_tuple[1],(start,end))#-59231
+#print(max_prime_streak,max_tuple)#71, [-69,971]
 
 
 ##############
@@ -188,15 +190,14 @@ for n in range(100,1000000):
 
 end = time.time()
 
-printsolution(30,sum(digit_five_powers),(start,end))
+printsolution(30,123,(start,end))
+#sum(digit_five_powers)
 #443839
 
 #print(digit_five_powers)
 #[4150, 4151, 54748, 92727, 93084, 194979]
 #print(sum(digit_five_powers))
 #443839
-
-printsolution(30,solution,(start,end))
 
 
 ##############
@@ -215,7 +216,7 @@ printsolution(30,solution,(start,end))
 
 end_total = time.time()
 
-print('Total time of computation: '+str(end_total-start_total))
+print('Total time of computation: '+str(round(end_total-start_total,4))+'s')
 
 #########################
 # end of the solutions
