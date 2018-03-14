@@ -1,5 +1,7 @@
 #######################################
-# projecteuler.net - python solutions # (Ruben Giannotti, 2014/2015)
+# projecteuler.net - python 2 solutions
+  # (problems 1-26)
+  # Ruben Giannotti, 2014-2018
 #######################################
 
 #########################
@@ -23,6 +25,20 @@ def isprime( n ):
         i+=2
     return True
 
+#alternative to above
+def isprime_alt(n):
+  return not (n<2 or any(n%x == 0 for x in xrange(2,int(n**0.5)+1)))
+
+#greatest common divisor: standard implementation
+def gcd(n,m):
+  while m != 0:
+    (n,m)=(m,n%m)
+  return n
+
+#method to check if two numbers are coprime
+def iscoprime2(n,m):
+  return gcd(n,m) == 1
+
 #prime generator: sieve of eratosthenes implementation
 def table_primes( limit ):
     is_prime = [True] * (limit >> 1)
@@ -33,7 +49,7 @@ def table_primes( limit ):
                 is_prime[j] = False
     return chain([2], ((i << 1) + 1 for i, t in enumerate(is_prime) if t))
 
-#depricated eratosthenes: very neffizient for n<=100000
+#depricated eratosthenes: very unefficient for n<=100000
 #n = 100; N = [2]+[2*k+1 for k in xrange(1,n/2)]
 #for k in xrange(2,n/2+1):
 #    if k in N:
@@ -85,8 +101,8 @@ def table_divisors( n ):
 
 #method to check if num is a palindrome
 def ispalindrome( num ):
-    digitstring = str(num); n = len(digitstring); m = -1
-    if n % 2 == 0:
+    digitstring=str(num); n=len(digitstring); m=-1
+    if n%2 == 0:
         while n-m>1:
             n=n-1; m=m+1
             if digitstring[n] != digitstring[m]:
@@ -120,10 +136,10 @@ def ispalindrome( num ):
 #        return tempa_array
 
 #method to generate collatz sequences
-def collatz( n ):
+def collatz(n):
 	coll = [n]
 	while n > 1:
-		if n % 2 == 0:
+		if n%2 == 0:
 			n = n/2
 		else:
 			n = 3*n+1
@@ -131,7 +147,7 @@ def collatz( n ):
 	return coll
 
 #method to print solutions
-def printsolution( prob , sol ):
+def printsolution(prob,sol):
     print '\nThe solution to problem #' + `prob` + ' is ' + `sol`
     return
 
@@ -967,6 +983,46 @@ for a in A:
                                         loopcount += 1
 
 printsolution(24,perm[999999])#
+
+end = time.time()
+
+print `end-start`
+
+
+##############
+# problem #26
+##############
+# Reciprocal cycles
+
+start = time.time()
+
+cycle_length_max = 0
+
+for i in xrange(1000):
+  if i != 0:
+    if i%2 != 0:
+      rem = 1
+      rem_list = [rem]
+      digits_list = []
+      while rem !=0:
+        while rem<=i:
+          rem = rem*10
+          digits_list.append(0)
+        digits_list = digits_list[:-1]
+        digit = rem//i
+        rem = rem%i
+        if rem in rem_list:
+          cycle_length = len(digits_list)+1-rem_list.index(rem)
+          if cycle_length > cycle_length_max:
+            cycle_length_max = cycle_length
+            cycle_length_max_index = i
+          break
+        else:
+          rem_list.append(rem)
+          digits_list.append(digit)
+
+#print cycle_length_max_index
+printsolution(26,cycle_length_max_index)##983
 
 end = time.time()
 
