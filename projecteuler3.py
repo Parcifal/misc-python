@@ -177,26 +177,65 @@ printsolution(29,number_distinct_powers,(start,end))
 # Digit fifth powers
 
 #slow!~13s
-start = time.time()
+#start = time.time()
 
-digit_five_powers = []
+#digit_five_powers = []
 
-for n in range(100,1000000):
-  fifth_power_sum = 0
-  for s in str(n):
-    fifth_power_sum += int(s)**5
-  if n == fifth_power_sum:
-    digit_five_powers.append(n)
+#for n in range(100,1000000):
+#  fifth_power_sum = 0
+#  for s in str(n):
+#    fifth_power_sum += int(s)**5
+#  if n == fifth_power_sum:
+#    digit_five_powers.append(n)
 
-end = time.time()
+#end = time.time()
 
-printsolution(30,123,(start,end))
+#printsolution(30,123,(start,end))
 #sum(digit_five_powers)
 #443839
 
 #print(digit_five_powers)
 #[4150, 4151, 54748, 92727, 93084, 194979]
 #print(sum(digit_five_powers))
+#443839
+
+def find_digit_powers(power):
+  digit_powers = []
+  n = 1
+  arrayFull = False
+  if power > 0:
+    while not arrayFull:
+      n += 1
+      # TODO pls check this ruben, maybe the maximal amount of elements in the
+      #      array is known beforehand?
+      if power > 3:
+        if(len(digit_powers) == 3*(power-3)):
+          arrayFull = True
+      else:
+        if n > 10000:
+          arrayFull = True
+      find_digit_powers_process(n,power,digit_powers)
+  return digit_powers
+
+def find_digit_powers_process(num,exp,arr):
+  digit_powers_sum = 0
+  for s in str(num):
+    digit_powers_sum += int(s)**exp
+  if num == digit_powers_sum:
+    arr.append(num)
+  return arr
+
+start = time.time()
+problem_number = 30
+problem_power = 5
+result = sum(find_digit_powers(problem_power))
+end = time.time()
+printsolution(problem_number,result,(start,end))
+#443839
+
+#print(find_digit_powers(problem_power))
+#[4150, 4151, 54748, 92727, 93084, 194979]
+#print(sum(result))
 #443839
 
 
