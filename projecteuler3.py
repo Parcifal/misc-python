@@ -9,6 +9,7 @@
 #########################
 
 import time
+import math
 from math import gcd as bltin_gcd
 
 #method to print the solution
@@ -123,22 +124,28 @@ printsolution(27,max_tuple[0]*max_tuple[1],(start,end))#-59231
 ##############
 # Number spiral diagonals
 
+def number_spiral_diagonals_sum(n):
+  sum = 0
+  for k in range(1,math.ceil(n/2)):
+    sum += 4*k**2+k+1
+  return 4*sum+1
+
+def number_spiral_diagonals_sum_explicit(n):
+  sum = 1
+  curr_num = 1
+  for n in range(1,n,2):
+    for k in range(1,4):
+      curr_num += n+1
+      sum += curr_num
+  return sum
+
 start = time.time()
-
 N = 1001
-
-sum = 1
-curr_num = 1
-
-for n in range(1,N,2):
-  for k in range(4):
-    curr_num += n+1
-    sum += curr_num
-
+result = number_spiral_diagonals_sum(N)
 end = time.time()
-
-printsolution(28,sum,(start,end))
+printsolution(28,result,(start,end))
 #669171001
+
 
 ##############
 # problem #29
